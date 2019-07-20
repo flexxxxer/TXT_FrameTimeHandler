@@ -31,5 +31,8 @@ namespace TXT_FrameTimeHandler.Commands
 
         public void Execute(object parameter)
             => this._execute(parameter);
+
+
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }

@@ -15,7 +15,23 @@ namespace TXT_FrameTimeHandler.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName)
-            => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            this.SelectLogFilePathCommand?.RaiseCanExecuteChanged();
+            this.SelectFrameTimingGraphFilePathCommand?.RaiseCanExecuteChanged();
+            this.SelectProbabilityDensityGraphFilePathCommand?.RaiseCanExecuteChanged();
+            this.SelectProbabilityDistributionGraphFilePathCommand?.RaiseCanExecuteChanged();
+
+            this.OpenLogFileCommand?.RaiseCanExecuteChanged();
+            this.SaveAsTxtFrameTimingGraphCommand?.RaiseCanExecuteChanged();
+            this.SaveAsTxtProbabilityDensityGraphCommand?.RaiseCanExecuteChanged();
+            this.SaveAsTxtProbabilityDistributionGraphCommand?.RaiseCanExecuteChanged();
+
+            this.WriteFrameTimingGraphCommand?.RaiseCanExecuteChanged();
+            this.WriteProbabilityDensityGraphCommand?.RaiseCanExecuteChanged();
+            this.WriteProbabilityDistributionGraphCommand?.RaiseCanExecuteChanged();
+        }
 
         private string _logFilePath;
         private string _frameTimingGraphFilePath;
@@ -106,6 +122,61 @@ namespace TXT_FrameTimeHandler.ViewModels
                 this.LogFilePath = file;
 
             }, (arg) => true);
+
+            this.SelectFrameTimingGraphFilePathCommand = new ClassicCommand((arg) =>
+            {
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = "GRG Files|*.grf;|All Files|*.*"
+                };
+
+                var result = fileDialog.ShowDialog(this.ViewWindow);
+
+                if (result != true)
+                    return;
+
+                var file = fileDialog.FileName;
+
+                this.FrameTimingGraphFilePath = file;
+
+            }, (arg) => true);
+
+            this.SelectProbabilityDensityGraphFilePathCommand = new ClassicCommand((arg) =>
+            {
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = "GRG Files|*.grf;|All Files|*.*"
+                };
+
+                var result = fileDialog.ShowDialog(this.ViewWindow);
+
+                if (result != true)
+                    return;
+
+                var file = fileDialog.FileName;
+
+                this.ProbabilityDensityGraphFilePath = file;
+
+            }, (arg) => true);
+
+            this.SelectProbabilityDistributionGraphFilePathCommand = new ClassicCommand((arg) =>
+            {
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = "GRG Files|*.grf;|All Files|*.*"
+                };
+
+                var result = fileDialog.ShowDialog(this.ViewWindow);
+
+                if (result != true)
+                    return;
+
+                var file = fileDialog.FileName;
+
+                this.ProbabilityDistributionGraphFilePath = file;
+
+            }, (arg) => true);
+
         }
     }
 }
