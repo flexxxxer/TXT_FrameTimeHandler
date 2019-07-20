@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TXT_FrameTimeHandler"
         xmlns:viewmodels="clr-namespace:TXT_FrameTimeHandler.ViewModels"
         mc:Ignorable="d"
-        Title="TXT_FrameTimeHandler" Height="450" Width="800" MinHeight="420" MinWidth="800">
+        Title="TXT_FrameTimeHandler" Height="450" Width="800" MinHeight="440" MinWidth="800">
 
     <Window.DataContext>
         <viewmodels:StartViewModel/>
@@ -76,7 +76,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
+                <TextBox Height="30" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
@@ -112,7 +112,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
+                <TextBox Height="30" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
@@ -148,7 +148,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
+                <TextBox Height="30" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
