@@ -22,7 +22,7 @@ namespace TXT_FrameTimeHandler
     {
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

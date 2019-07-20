@@ -10,5 +10,10 @@ namespace TXT_FrameTimeHandler.ViewModels
     public class StartViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+            => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public string LogFilePath { get; set; }
     }
 }
