@@ -64,6 +64,11 @@
     </Compile>
     <Compile Include="Commands\ClassicCommand.cs" />
     <Compile Include="Commands\Util.cs" />
+    <Compile Include="DataProcessing\FrameVew\FrameViewData.cs" />
+    <Compile Include="DataProcessing\FrameVew\FrameViewDataProcessing.cs" />
+    <Compile Include="DataProcessing\Fraps\FrapsData.cs" />
+    <Compile Include="DataProcessing\Fraps\FrapsDataProcessing.cs" />
+    <Compile Include="DataProcessing\Maybe.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="Views\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
@@ -96,8 +101,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataProcessing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

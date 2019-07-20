@@ -176,7 +176,6 @@ namespace TXT_FrameTimeHandler.ViewModels
                 this.ProbabilityDistributionGraphFilePath = file;
 
             }, (arg) => true);
-
         }
     }
 }
