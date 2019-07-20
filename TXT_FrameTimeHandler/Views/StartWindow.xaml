@@ -41,7 +41,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
-                <Button Grid.Column="1" Margin="5" Content="Обзор"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectLogFilePathCommand}"/>
                 <Button Grid.Column="2" Margin="5" Content="Открыть"/>
             </Grid>
         </Grid>
@@ -78,7 +78,7 @@
 
                 <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Открыть"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
         </Grid>
 
@@ -114,7 +114,7 @@
 
                 <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Открыть"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
         </Grid>
 
@@ -150,7 +150,7 @@
 
                 <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Открыть"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать"/>
             </Grid>
         </Grid>
 

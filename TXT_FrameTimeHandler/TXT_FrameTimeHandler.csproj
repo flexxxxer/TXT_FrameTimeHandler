@@ -62,6 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\ClassicCommand.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="Views\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
