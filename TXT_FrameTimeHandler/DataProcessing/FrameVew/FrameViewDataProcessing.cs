@@ -8,19 +8,19 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
 {
     public static class FrameViewDataProcessing
     {
-        public static Maybe<FrameViewData> ProcessFrapsFile()
+        public static Maybe<FramesData> ProcessFrapsFile()
         {
             try
             {
-                var frameViewData = new FrameViewData();
+                var frameViewData = new FramesData(null);
 
 
 
-                return new Maybe<FrameViewData>(frameViewData);
+                return new Maybe<FramesData>(frameViewData);
             }
             catch (Exception)
             {
-                return Maybe<FrameViewData>.None;
+                return Maybe<FramesData>.None;
             }
         }
     }

@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace TXT_FrameTimeHandler.DataProcessing.Fraps
 {
     public static class FrapsDataProcessing
     {
-        public static Maybe<FrapsData> ProcessFrapsFile(string path)
+        public static Maybe<FramesData> ProcessFrapsFile(string path)
         {
             FileStream fs = default;
             BufferedStream bs = default;
             StreamReader sr = default;
+
             try
             {
-                var frapsData = new FrapsData();
+                var framesTimes = new LinkedList<double>();
 
                 fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 bs = new BufferedStream(fs);
@@ -29,12 +27,12 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                 var line = "";
                 var lastItemFrameTime = 0.0; // first item frametime is always zero 
 
-                frapsData.FrameTimes.AddLast(lastItemFrameTime);
+                framesTimes.AddLast(lastItemFrameTime);
 
                 // others
                 while ((line = sr.ReadLine()) != null)
                 {
-                    #region parse string of format "number, frametime"
+                    #region parse string of format "framenumber, frametime"
                     var index = line.LastIndexOf(',');
                     line = line.Substring(index + 1);
                     line = string
@@ -44,12 +42,14 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                     var currentItemFrameTime = Convert.ToDouble(line, 
                         CultureInfo.InvariantCulture // because Russians and others have "12,34", but not "12.34" :)
                         );
-                    frapsData.FrameTimes.AddLast(currentItemFrameTime - lastItemFrameTime);
+                    framesTimes.AddLast(currentItemFrameTime - lastItemFrameTime);
                     lastItemFrameTime = currentItemFrameTime;
                 }
 
 
-                return new Maybe<FrapsData>(frapsData);
+                return new Maybe<FramesData>(
+                    new FramesData(framesTimes)
+                    );
             }
             catch (Exception)
             {
@@ -60,7 +60,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                 if (sr != null)
                     sr.Dispose();
 
-                return Maybe<FrapsData>.None;
+                return Maybe<FramesData>.None;
             }
             finally
             {

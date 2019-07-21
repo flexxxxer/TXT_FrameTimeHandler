@@ -185,7 +185,7 @@ namespace TXT_FrameTimeHandler.ViewModels
 
             this.OpenLogFileCommand = new ClassicCommand((arg) =>
             {
-                Maybe<FrapsData> result = FrapsDataProcessing.ProcessFrapsFile(this.LogFilePath);
+                Maybe<FramesData> result = FrapsDataProcessing.ProcessFrapsFile(this.LogFilePath);
 
                 if(!result.HasValue)
                 {
