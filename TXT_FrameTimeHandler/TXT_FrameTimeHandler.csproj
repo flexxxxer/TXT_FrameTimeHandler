@@ -68,7 +68,6 @@
     <Compile Include="DataProcessing\FramesData.cs" />
     <Compile Include="DataProcessing\FrameVew\FrameViewDataProcessing.cs" />
     <Compile Include="DataProcessing\Fraps\FrapsDataProcessing.cs" />
-    <Compile Include="DataProcessing\LinkedQueue.cs" />
     <Compile Include="DataProcessing\Maybe.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
     <Compile Include="Views\StartWindow.xaml.cs">
