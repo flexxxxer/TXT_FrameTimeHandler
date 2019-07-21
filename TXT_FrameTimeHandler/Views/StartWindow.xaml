@@ -40,7 +40,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
+                <TextBox Height="30" FontSize="16" TextWrapping="NoWrap" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectLogFilePathCommand}"/>
                 <Button Grid.Column="2" Margin="5" Content="Открыть" Command="{Binding OpenLogFileCommand}"/>
             </Grid>
@@ -64,7 +64,7 @@
                 <TextBlock Text="График времени кадров" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
                 <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
-                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtFrameTimingGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -76,9 +76,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
-                <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Записать"/>
+                <TextBox Height="30" FontSize="16" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectFrameTimingGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteFrameTimingGraphCommand}"/>
             </Grid>
         </Grid>
 
@@ -100,7 +100,7 @@
                 <TextBlock Text="График плотности вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
                 <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
-                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtProbabilityDensityGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -112,9 +112,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
-                <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Записать"/>
+                <TextBox Height="30" FontSize="16" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDensityGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDensityGraphCommand}"/>
             </Grid>
         </Grid>
 
@@ -136,7 +136,7 @@
                 <TextBlock Text="График распределения вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
                 <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
-                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtProbabilityDistributionGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -148,9 +148,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Right"/>
-                <Button Grid.Column="1" Margin="5" Content="Обзор"/>
-                <Button Grid.Column="2" Margin="5" Content="Записать"/>
+                <TextBox Height="30" FontSize="16" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDistributionGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDistributionGraphCommand}"/>
             </Grid>
         </Grid>
 

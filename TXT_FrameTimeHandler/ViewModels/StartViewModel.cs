@@ -114,8 +114,6 @@ namespace TXT_FrameTimeHandler.ViewModels
         public ClassicCommand SaveAsTxtProbabilityDensityGraphCommand { get; }
         public ClassicCommand SaveAsTxtProbabilityDistributionGraphCommand { get; }
 
-        
-
         public ClassicCommand WriteFrameTimingGraphCommand { get; }
         public ClassicCommand WriteProbabilityDensityGraphCommand { get; }
         public ClassicCommand WriteProbabilityDistributionGraphCommand { get; }
@@ -203,16 +201,58 @@ namespace TXT_FrameTimeHandler.ViewModels
             {
                 Maybe<FramesData> result = FrapsDataProcessing.ProcessFrapsFile(this.LogFilePath);
                 result = result.HasValue ? result : FrameViewDataProcessing.ProcessFrameViewFile(this.LogFilePath);
+                this.ResultFramesData = result;
 
                 if (!result.HasValue)
                 {
                     MessageBox.Show("this is not Fraps or FrameView file");
                     return;
                 }
+                else
+                {
+                    FramesData data = result.Value;
+                    var content = "TXT FrameTimeHandler v0.5     Konushkov Pavel. YouTube Channel: Этот Компьютер" 
+                    + Environment.NewLine 
+                    + Environment.NewLine 
+                    + "Frames\t\tTime test\t\tAVG_FPS\t\tLow 0.1% mFPS\t\tLow 1% mFPS\t\tLow 5% mFPS\t\tLow 50% mFPS\t\ttest name"
+                    + Environment.NewLine
+                    + $"{data.Count}\t\t{data.TimeTest}\t\t{data.AvgFPS}\t\t{data.OneTenthPercentFPS}\t\t\t{data.OnePercentFps}\t\t\t{data.FivePercentFPS}\t\t\t{data.FiftyPercentFPS}\t\t\t{"my test"}"
+                    + Environment.NewLine;
 
-                this.ResultFramesData = result;
+                    File.WriteAllText($"{Directory.GetCurrentDirectory()}\\data.txt", content);
+                }
 
             }, (arg) => string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath));
+
+            this.SaveAsTxtFrameTimingGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+
+            this.SaveAsTxtProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+
+            this.SaveAsTxtProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+
+            this.WriteFrameTimingGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+
+            this.WriteProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+
+            this.WriteProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
+            {
+
+            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
         }
     }
 }
