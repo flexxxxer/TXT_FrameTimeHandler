@@ -9,9 +9,9 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
     {
         public static Maybe<FramesData> ProcessFrapsFile(string path)
         {
-            FileStream fs = default;
-            BufferedStream bs = default;
-            StreamReader sr = default;
+            var fs = default(FileStream);
+            var bs = default(BufferedStream);
+            var sr = default(StreamReader);
 
             try
             {

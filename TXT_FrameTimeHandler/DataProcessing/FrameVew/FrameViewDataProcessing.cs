@@ -10,9 +10,9 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
     {
         public static Maybe<FramesData> ProcessFrameViewFile(string path)
         {
-            FileStream fs = default;
-            BufferedStream bs = default;
-            StreamReader sr = default;
+            var fs = default(FileStream);
+            var bs = default(BufferedStream);
+            var sr = default(StreamReader);
 
             try
             {

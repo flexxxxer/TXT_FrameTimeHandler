@@ -226,16 +226,25 @@ namespace TXT_FrameTimeHandler.ViewModels
 
             this.SaveAsTxtFrameTimingGraphCommand = new ClassicCommand((arg) =>
             {
+                FramesData data = this.ResultFramesData.Value;
+
+                // данные графика времени кадров
 
             }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.SaveAsTxtProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
             {
+                FramesData data = this.ResultFramesData.Value;
+
+                // данные графика плотности вероятности
 
             }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.SaveAsTxtProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
             {
+                FramesData data = this.ResultFramesData.Value;
+
+                // данные графика распределения вероятности
 
             }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
