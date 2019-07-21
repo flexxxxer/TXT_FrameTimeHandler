@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TXT_FrameTimeHandler.Commands;
+using TXT_FrameTimeHandler.DataProcessing;
 
 namespace TXT_FrameTimeHandler.ViewModels
 {

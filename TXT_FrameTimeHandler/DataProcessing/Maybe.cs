@@ -6,20 +6,34 @@ using System.Threading.Tasks;
 
 namespace TXT_FrameTimeHandler.DataProcessing
 {
-    public class Maybe<T> where T : class
+    public class Maybe<T>
     {
         private readonly T _value;
 
-        public Maybe() { }
+        private Maybe() { }
 
-        public Maybe(T someValue) => this._value = someValue;
-
-        public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func) where TO : class 
-            => this._value != null ? func(this._value) : Maybe<TO>.None();
+        public Maybe(T someValue)
+        {
+            if (typeof(T).IsClass)
+                if (someValue == null)
+                    throw new ArgumentException();
+        }
 
         public bool HasValue
-            => this._value is null;
+            => typeof(T).IsClass ? this._value == null : true;
 
-        public static Maybe<T> None() => new Maybe<T>();
+        public T Value
+        {
+            get
+            {
+                if (typeof(T).IsClass)
+                    if (this._value == null)
+                        throw new Exception();
+
+                return this._value;
+            }
+        }
+
+        public static Maybe<T> None { get; } = new Maybe<T>();
     }
 }
