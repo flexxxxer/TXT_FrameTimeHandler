@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TXT_FrameTimeHandler.Commands;
 using TXT_FrameTimeHandler.DataProcessing;
+using TXT_FrameTimeHandler.DataProcessing.FrameVew;
 using TXT_FrameTimeHandler.DataProcessing.Fraps;
 
 namespace TXT_FrameTimeHandler.ViewModels
@@ -40,6 +41,7 @@ namespace TXT_FrameTimeHandler.ViewModels
         private string _frameTimingGraphFilePath;
         private string _probabilityDensityGraphFilePath;
         private string _probabilityDistributionGraphFilePath;
+        private Maybe<FramesData> _resultFramesData = Maybe<FramesData>.None;
 
         public string LogFilePath
         {
@@ -89,6 +91,18 @@ namespace TXT_FrameTimeHandler.ViewModels
                 this.OnPropertyChanged("ProbabilityDistributionGraphFilePath");
             }
         }
+        public Maybe<FramesData> ResultFramesData
+        {
+            get => this._resultFramesData;
+            set
+            {
+                if (this._resultFramesData == value)
+                    return;
+
+                this._resultFramesData = value;
+                this.OnPropertyChanged("ResultFramesData");
+            }
+        }
 
         public ClassicCommand SelectLogFilePathCommand { get; }
         public ClassicCommand SelectFrameTimingGraphFilePathCommand { get; }
@@ -99,6 +113,8 @@ namespace TXT_FrameTimeHandler.ViewModels
         public ClassicCommand SaveAsTxtFrameTimingGraphCommand { get; }
         public ClassicCommand SaveAsTxtProbabilityDensityGraphCommand { get; }
         public ClassicCommand SaveAsTxtProbabilityDistributionGraphCommand { get; }
+
+        
 
         public ClassicCommand WriteFrameTimingGraphCommand { get; }
         public ClassicCommand WriteProbabilityDensityGraphCommand { get; }
@@ -186,14 +202,17 @@ namespace TXT_FrameTimeHandler.ViewModels
             this.OpenLogFileCommand = new ClassicCommand((arg) =>
             {
                 Maybe<FramesData> result = FrapsDataProcessing.ProcessFrapsFile(this.LogFilePath);
+                result = result.HasValue ? result : FrameViewDataProcessing.ProcessFrameViewFile(this.LogFilePath);
 
-                if(!result.HasValue)
+                if (!result.HasValue)
                 {
-
+                    MessageBox.Show("this is not Fraps or FrameView file");
+                    return;
                 }
 
+                this.ResultFramesData = result;
 
-            }, (arg) => true);
+            }, (arg) => string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath));
         }
     }
 }

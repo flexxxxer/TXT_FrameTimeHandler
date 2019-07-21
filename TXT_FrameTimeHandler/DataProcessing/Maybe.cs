@@ -36,6 +36,11 @@ namespace TXT_FrameTimeHandler.DataProcessing
             }
         }
 
+        public Maybe<U> Bind<U>(Func<T, Maybe<U>> func)
+        {
+            return this._value != null ? func(this._value) : Maybe<U>.None;
+        }
+
         public static Maybe<T> None { get; } = new Maybe<T>();
     }
 }
