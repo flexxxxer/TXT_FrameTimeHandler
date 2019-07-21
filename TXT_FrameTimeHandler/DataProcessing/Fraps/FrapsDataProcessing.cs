@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,39 +19,35 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
             {
                 var frapsData = new FrapsData();
 
-                using (fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                bs = new BufferedStream(fs);
+                sr = new StreamReader(bs);
+
+                sr.ReadLine(); // read emmpty line
+                sr.ReadLine(); // read first item
+
+                var line = "";
+                var lastItemFrameTime = 0.0; // first item frametime is always zero 
+
+                frapsData.FrameTimes.AddLast(lastItemFrameTime);
+
+                // others
+                while ((line = sr.ReadLine()) != null)
                 {
-                    using (bs = new BufferedStream(fs))
-                    {
-                        using (sr = new StreamReader(bs))
-                        {
-                            
-                            sr.ReadLine(); // read emmpty line
-                            sr.ReadLine(); // read first item
+                    #region parse string of format "number, frametime"
+                    var index = line.LastIndexOf(',');
+                    line = line.Substring(index + 1);
+                    line = string
+                        .Join("", line.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+                    #endregion
 
-                            var line = "";
-                            var lastItemFrameTime = 0.0; // first item frametime is always zero 
-
-                            frapsData.FrameTimes.AddLast(lastItemFrameTime);
-
-                            // others
-                            while ((line = sr.ReadLine()) != null)
-                            {
-                                #region parse string of format "number, frametime"
-                                var index = line.LastIndexOf(',');
-                                line = line.Substring(index + 1);
-                                line = string
-                                    .Join("", line.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries))
-                                    .Replace('.', ',');
-                                #endregion
-
-                                var currentItemFrameTime = Convert.ToDouble(line);
-                                frapsData.FrameTimes.AddLast(currentItemFrameTime - lastItemFrameTime);
-                                lastItemFrameTime = currentItemFrameTime;
-                            }
-                        }
-                    }
+                    var currentItemFrameTime = Convert.ToDouble(line, 
+                        CultureInfo.InvariantCulture // because Russians and others have "12,34", but not "12.34" :)
+                        );
+                    frapsData.FrameTimes.AddLast(currentItemFrameTime - lastItemFrameTime);
+                    lastItemFrameTime = currentItemFrameTime;
                 }
+
 
                 return new Maybe<FrapsData>(frapsData);
             }
@@ -60,10 +57,19 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                     fs.Dispose();
                 if (bs != null)
                     bs.Dispose();
-                if (sr != null) 
+                if (sr != null)
                     sr.Dispose();
 
                 return Maybe<FrapsData>.None;
+            }
+            finally
+            {
+                if (fs != null)
+                    fs.Dispose();
+                if (bs != null)
+                    bs.Dispose();
+                if (sr != null)
+                    sr.Dispose();
             }
         }
     }
