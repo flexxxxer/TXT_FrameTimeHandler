@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TXT_FrameTimeHandler.Commands;
 using TXT_FrameTimeHandler.DataProcessing;
+using TXT_FrameTimeHandler.DataProcessing.Fraps;
 
 namespace TXT_FrameTimeHandler.ViewModels
 {
@@ -113,6 +115,9 @@ namespace TXT_FrameTimeHandler.ViewModels
                     Filter = "CSV Files|*.csv;|All Files|*.*"
                 };
 
+                if (Directory.GetFiles(Directory.GetCurrentDirectory()).Any(dirfile => Path.GetExtension(dirfile) == ".csv"))
+                    fileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+
                 var result = fileDialog.ShowDialog(this.ViewWindow);
 
                 if (result != true)
@@ -175,6 +180,18 @@ namespace TXT_FrameTimeHandler.ViewModels
                 var file = fileDialog.FileName;
 
                 this.ProbabilityDistributionGraphFilePath = file;
+
+            }, (arg) => true);
+
+            this.OpenLogFileCommand = new ClassicCommand((arg) =>
+            {
+                Maybe<FrapsData> result = FrapsDataProcessing.ProcessFrapsFile(this.LogFilePath);
+
+                if(!result.HasValue)
+                {
+
+                }
+
 
             }, (arg) => true);
         }

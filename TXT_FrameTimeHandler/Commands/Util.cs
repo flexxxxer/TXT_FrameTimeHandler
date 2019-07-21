@@ -7,5 +7,8 @@ using System.Windows.Input;
 
 namespace TXT_FrameTimeHandler.Commands
 {
-    public static class Util { }
+    public static class Util
+    {
+
+    }
 }

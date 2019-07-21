@@ -17,10 +17,12 @@ namespace TXT_FrameTimeHandler.DataProcessing
             if (typeof(T).IsClass)
                 if (someValue == null)
                     throw new ArgumentException();
+
+            this._value = someValue;
         }
 
-        public bool HasValue
-            => typeof(T).IsClass ? this._value == null : true;
+        public bool HasValue 
+            => typeof(T).IsClass ? this._value != null : true;
 
         public T Value
         {
