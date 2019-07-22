@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -229,24 +230,76 @@ namespace TXT_FrameTimeHandler.ViewModels
                 FramesData data = this.ResultFramesData.Value;
 
                 // данные графика времени кадров
+                var frames = new List<(double frameNumber, double frameTime)>(data.FramesTimes.Count() - 1);
+                var frameNumber = 1;
+                foreach (var frameTimeItem in data.FramesTimes.Skip(1))
+                {
+                    var frameN = frameNumber++ + frameTimeItem;
+                    frames.Add( (frameN, frameTimeItem) );
+                }
 
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+                var content = string.Join(Environment.NewLine,
+                    frames.Select(frame => 
+                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}", 
+                            frame.frameNumber.Round2(), frame.frameTime.Round2())
+                        )
+                    );
+
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\FrameTimeReport.txt"
+                    , content);
+
+            }, (arg) => this.ResultFramesData.HasValue);
 
             this.SaveAsTxtProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
             {
                 FramesData data = this.ResultFramesData.Value;
 
                 // данные графика плотности вероятности
+                var frames = new List<(double frameValue, double frameTime)>(data.FramesTimes.Count() - 1);
+                var sum_time = 0.0;
+                foreach (var frameTimeItem in data.FramesTimes.Skip(1))
+                {
+                    sum_time += frameTimeItem;
+                    var frameValue = 1000.0 / frameTimeItem;
+                    frames.Add( (frameValue, sum_time / data.TimeTest * 100) );
+                }
 
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+                var content = string.Join(Environment.NewLine,
+                    frames.Select(frame =>
+                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}",
+                            frame.frameValue.Round2(), frame.frameTime.Round2())
+                        )
+                    );
+
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDensityReport.txt"
+                    , content);
+
+            }, (arg) => this.ResultFramesData.HasValue);
 
             this.SaveAsTxtProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
             {
                 FramesData data = this.ResultFramesData.Value;
 
                 // данные графика распределения вероятности
+                var frames = new List<(double frameValue, double frameTime)>(data.FramesTimes.Count() - 1);
+                var frameNumber = 1;
+                foreach (var frameTimeItem in data.FramesTimes.Skip(1))
+                {
+                    var frameValue = 1000.0 / frameNumber++;
+                    frames.Add( (frameValue, frameTimeItem) );
+                }
 
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+                var content = string.Join(Environment.NewLine,
+                    frames.Select(frame =>
+                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}",
+                            frame.frameValue.Round2(), frame.frameTime.Round2())
+                        )
+                    );
+
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDistributionReport.txt"
+                    , content);
+
+            }, (arg) => this.ResultFramesData.HasValue);
 
             this.WriteFrameTimingGraphCommand = new ClassicCommand((arg) =>
             {
