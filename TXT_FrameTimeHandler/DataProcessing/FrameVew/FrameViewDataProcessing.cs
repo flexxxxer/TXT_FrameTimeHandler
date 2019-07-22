@@ -22,7 +22,8 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                 bs = new BufferedStream(fs);
                 sr = new StreamReader(bs);
 
-                var MsBetweenDisplayChangeActualColumnIndex = sr.ReadLine()
+                var MsBetweenDisplayChangeActualColumnIndex = 
+                    sr.ReadLine()
                     .Split(',')
                     .ToList()
                     .FindIndex(column => column == "MsBetweenDisplayChangeActual");

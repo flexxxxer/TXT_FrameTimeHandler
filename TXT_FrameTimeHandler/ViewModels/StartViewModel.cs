@@ -1,13 +1,13 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Globalization;
+using System.ComponentModel;
+using System.Collections.Generic;
+
+using Microsoft.Win32;
+
 using TXT_FrameTimeHandler.Commands;
 using TXT_FrameTimeHandler.DataProcessing;
 using TXT_FrameTimeHandler.DataProcessing.FrameVew;

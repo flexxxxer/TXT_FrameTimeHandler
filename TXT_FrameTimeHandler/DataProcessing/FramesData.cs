@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing
 {
@@ -69,12 +70,12 @@ namespace TXT_FrameTimeHandler.DataProcessing
 
             #endregion
 
-            this.OneTenthPercentFPS = Math.Round(oneTenthPercentTime, 2);
-            this.OnePercentFps = Math.Round(onePercentFps, 2);
-            this.FivePercentFPS = Math.Round(fivePercentFPS, 2);
-            this.FiftyPercentFPS = Math.Round(fiftyPercentFPS, 2);
-            this.AvgFPS = Math.Round(avgFPS, 2);
-            this.TimeTest = Math.Round(testTime, 2);
+            this.OneTenthPercentFPS = oneTenthPercentTime.Round2();
+            this.OnePercentFps = onePercentFps.Round2();
+            this.FivePercentFPS = fivePercentFPS.Round2();
+            this.FiftyPercentFPS = fiftyPercentFPS.Round2();
+            this.AvgFPS = avgFPS.Round2();
+            this.TimeTest = testTime.Round2();
         }
     }
 }
