@@ -49,7 +49,8 @@ namespace TXT_FrameTimeHandler.DataProcessing
             while (framesTimeSum < oneTenthPercentTime)
                 framesTimeSum += orderedFramesTimes[++index];
 
-            oneTenthPercentFPS = 1000.0 / orderedFramesTimes[index];
+            framesTimeSum += orderedFramesTimes[index + 1];
+            oneTenthPercentFPS = 1000.0 / orderedFramesTimes[index + 1];
 
             while (framesTimeSum < onePercentTime)
                 framesTimeSum += orderedFramesTimes[++index];
@@ -70,12 +71,12 @@ namespace TXT_FrameTimeHandler.DataProcessing
 
             #endregion
 
-            this.OneTenthPercentFPS = oneTenthPercentTime.Round2();
+            this.OneTenthPercentFPS = oneTenthPercentFPS.Round2();
             this.OnePercentFps = onePercentFps.Round2();
             this.FivePercentFPS = fivePercentFPS.Round2();
             this.FiftyPercentFPS = fiftyPercentFPS.Round2();
             this.AvgFPS = avgFPS.Round2();
-            this.TimeTest = testTime.Round2();
+            this.TimeTest = (testTime / 1000.0).Round2();
         }
     }
 }

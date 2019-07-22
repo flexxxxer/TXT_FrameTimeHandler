@@ -3,6 +3,7 @@ using System.IO;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
+using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
 {
@@ -37,7 +38,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
 
                     var currentItemFrameTime = Convert.ToDouble(line,
                         CultureInfo.InvariantCulture // because Russians and others have "12,34", but not "12.34" :)
-                        );
+                        ).Round2();
                     framesTimes.AddLast(currentItemFrameTime);
                 }
 
