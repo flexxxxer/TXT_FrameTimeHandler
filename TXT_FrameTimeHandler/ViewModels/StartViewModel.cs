@@ -38,7 +38,19 @@ namespace TXT_FrameTimeHandler.ViewModels
             this.WriteProbabilityDistributionGraphCommand?.RaiseCanExecuteChanged();
         }
 
-        public string ReportName { get; set; } = "my report";
+        private string _reportName = "";
+        public string ReportName
+        {
+            get => this._reportName;
+            set
+            {
+                if (this._reportName == value)
+                    return;
+
+                this._reportName = value;
+                this.OnPropertyChanged("ReportName");
+            }
+        }
 
         private string _logFilePath;
         private string _frameTimingGraphFilePath;
@@ -117,8 +129,19 @@ namespace TXT_FrameTimeHandler.ViewModels
         public ClassicCommand SaveAsTxtProbabilityDensityGraphCommand { get; }
         public ClassicCommand SaveAsTxtProbabilityDistributionGraphCommand { get; }
 
+        /// <summary>
+        /// Строит график времени кадра
+        /// </summary>
         public ClassicCommand WriteFrameTimingGraphCommand { get; }
+
+        /// <summary>
+        /// Строит график плотности вероятности
+        /// </summary>
         public ClassicCommand WriteProbabilityDensityGraphCommand { get; }
+
+        /// <summary>
+        /// Строит график распределения вероятности
+        /// </summary>
         public ClassicCommand WriteProbabilityDistributionGraphCommand { get; }
 
         private Window ViewWindow => Application.Current.MainWindow;
@@ -225,7 +248,7 @@ namespace TXT_FrameTimeHandler.ViewModels
                     File.WriteAllText($"{Directory.GetCurrentDirectory()}\\data.txt", content);
                 }
 
-            }, (arg) => string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath));
+            }, (arg) => !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.SaveAsTxtFrameTimingGraphCommand = new ClassicCommand((arg) =>
             {
@@ -247,12 +270,50 @@ namespace TXT_FrameTimeHandler.ViewModels
                         )
                     );
 
-                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\FrameTimeReport.txt"
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\FrameTimeReport_{this.ReportName}.txt"
                     , content);
 
-            }, (arg) => this.ResultFramesData.HasValue);
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName));
 
             this.SaveAsTxtProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
+            {
+                FramesData data = this.ResultFramesData.Value;
+                var testTime = data.TimeTest * 1000.0;
+                var distrValues = new Dictionary<double, double>();
+
+                IEnumerable<double> allFrameTimes = data.FramesTimes
+                    .Select(value => value.Round05());
+
+
+                foreach (var frameTime in
+                    allFrameTimes.ElementAt(0).Round() == 0.0 ?
+                        allFrameTimes.Skip(1) : allFrameTimes)
+                {
+
+                    if (distrValues.ContainsKey(frameTime))
+                        distrValues[frameTime] += frameTime;
+                    else
+                        distrValues.Add(frameTime, frameTime);
+                }
+
+
+                IEnumerable<(double, double)> points =
+                    distrValues.OrderByDescending(item => item.Key)
+                        .Select(item => ((1000.0 / item.Key).Round2(), item.Value.Round2()));
+
+                var content = string.Join(Environment.NewLine,
+                    points.Select(frame =>
+                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}",
+                            frame.Item1.Round2(), frame.Item2.Round2())
+                        )
+                    );
+
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDensityReport_{this.ReportName}.txt"
+                    , content);
+
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName));
+
+            this.SaveAsTxtProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
             {
                 FramesData data = this.ResultFramesData.Value;
 
@@ -263,7 +324,7 @@ namespace TXT_FrameTimeHandler.ViewModels
                 {
                     sum_time += frameTimeItem;
                     var frameValue = 1000.0 / frameTimeItem;
-                    frames.Add( (frameValue, sum_time / data.TimeTest / 10.0) );
+                    frames.Add((frameValue, sum_time / data.TimeTest / 10.0));
                 }
 
                 var content = string.Join(Environment.NewLine,
@@ -273,40 +334,88 @@ namespace TXT_FrameTimeHandler.ViewModels
                         )
                     );
 
-                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDensityReport.txt"
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDistributionReport_{this.ReportName}.txt"
                     , content);
 
-            }, (arg) => this.ResultFramesData.HasValue);
-
-            this.SaveAsTxtProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
-            {
-                FramesData data = this.ResultFramesData.Value;
-
-                // данные графика распределения вероятности
-                var frames = new List<(double frameValue, double frameTime)>(data.FramesTimes.Count() - 1);
-                var frameNumber = 1;
-                foreach (var frameTimeItem in data.FramesTimes.OrderByDescending(v => v))
-                {
-                    var frameValue = 1000.0 / frameNumber++;
-                    frames.Add( (frameValue, frameTimeItem * (100000.0 / data.TimeTest)) );
-                }
-
-                var content = string.Join(Environment.NewLine,
-                    frames.Select(frame =>
-                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}",
-                            frame.frameValue.Round2(), frame.frameTime.Round2())
-                        )
-                    );
-
-                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\ProbabilityDistributionReport.txt"
-                    , content);
-
-            }, (arg) => this.ResultFramesData.HasValue);
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName));
 
             this.WriteFrameTimingGraphCommand = new ClassicCommand((arg) =>
             {
+                FramesData data = this.ResultFramesData.Value;
+                var totalTime = data.TimeTest;
+                // данные графика времени кадров
+                var frames = new List<(double frameNumber, double frameTime)>(data.FramesTimes.Count() - 1);
+                var frameNumber = 0.0;
+                foreach (var frameTimeItem in data.FramesTimes.Skip(1))
+                {
+                    frameNumber += frameTimeItem;
+                    frames.Add((frameNumber, frameTimeItem));
+                }
 
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+                IEnumerable<(double, double)> points =
+                    frames.Select(item => (item.frameNumber, item.frameTime));
+
+                var textPointsContent = string.Join(";",
+                    points
+                        .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
+                    );
+
+                var content =
+                    $@";This file was created by Graph (http://www.padowan.dk)
+; Do not change this file from other programs.
+[Graph]
+Version = 4.4.2.543
+MinVersion = 2.5
+OS = Windows NT 6.2
+
+[Axes]
+xMin = -5
+xMax = 180
+xTickUnit = 5
+xGridUnit = 5
+xShowGrid = 1
+xLabel = mFPS
+yMin = -600
+yMax = 10000
+yTickUnit = 500
+yGridUnit = 3000
+yShowGrid = 1
+yAutoGrid = 0
+yLabel = Время
+yShowNumbers = 0
+AxesColor = clBlack
+GridColor = clSilver
+NumberFont = Kizo Light,20,clBlack
+LabelFont = Kizo Light,30,clBlack
+LegendFont = Kizo Light,20,clBlack
+ShowLegend = 1
+Radian = 1
+Title = {this.ReportName}
+TitleFont = Kizo Light,30,clBlack
+
+[PointSeries1]
+FillColor = clRed
+LineColor = clRed
+Size = 0
+Style = 0
+LineSize = 2
+LineStyle = 0
+Interpolation = 2
+LabelPosition = 1
+PointCount = {points.Count() + 1}
+Points = {textPointsContent};
+LegendText = Frame Timing Graph
+
+[Data]
+TextLabelCount = 0
+FuncCount = 0
+PointSeriesCount = 1
+ShadeCount = 0
+RelationCount = 0
+OleObjectCount = 0";
+
+                File.WriteAllText(this.FrameTimingGraphFilePath, content, System.Text.Encoding.UTF8);
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.WriteProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
             {
@@ -369,7 +478,7 @@ LabelFont = Kizo Light,30,clBlack
 LegendFont = Kizo Light,20,clBlack
 ShowLegend = 1
 Radian = 1
-Title = Распределение времени кадра Metro E. | DXR HI / Ult | CPU overload
+Title = {this.ReportName}
 TitleFont = Kizo Light,30,clBlack
 
 [PointSeries1]
@@ -383,7 +492,7 @@ Interpolation = 2
 LabelPosition = 1
 PointCount = {points.Count() + 1}
 Points = {textPointsContent};
-LegendText = {this.ReportName}
+LegendText = Probability Density Graph
 
 [Data]
 TextLabelCount = 0
@@ -394,13 +503,86 @@ RelationCount = 0
 OleObjectCount = 0";
 
                 File.WriteAllText(this.ProbabilityDensityGraphFilePath, content, System.Text.Encoding.UTF8);
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.WriteProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
             {
-                
+                FramesData data = this.ResultFramesData.Value;
 
-            }, (arg) => this.ResultFramesData.HasValue && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+                // данные графика плотности вероятности
+                var frames = new List<(double frameValue, double frameTime)>(data.FramesTimes.Count() - 1);
+                var sum_time = 0.0;
+                foreach (var frameTimeItem in data.FramesTimes.OrderByDescending(v => v))
+                {
+                    sum_time += frameTimeItem;
+                    var frameValue = 1000.0 / frameTimeItem;
+                    frames.Add((frameValue, sum_time / data.TimeTest / 10.0));
+                }
+
+                IEnumerable<(double, double)> points =
+                    frames.Select(item => (item.frameValue.Round2(), item.frameTime.Round2()));
+
+                var textPointsContent = string.Join(";",
+                    points
+                        .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
+                    );
+
+                var content =
+                    $@";This file was created by Graph (http://www.padowan.dk)
+; Do not change this file from other programs.
+[Graph]
+Version = 4.4.2.543
+MinVersion = 2.5
+OS = Windows NT 6.2
+
+[Axes]
+xMin = -5
+xMax = 180
+xTickUnit = 5
+xGridUnit = 5
+xShowGrid = 1
+xLabel = mFPS
+yMin = -600
+yMax = 10000
+yTickUnit = 500
+yGridUnit = 3000
+yShowGrid = 1
+yAutoGrid = 0
+yLabel = Время
+yShowNumbers = 0
+AxesColor = clBlack
+GridColor = clSilver
+NumberFont = Kizo Light,20,clBlack
+LabelFont = Kizo Light,30,clBlack
+LegendFont = Kizo Light,20,clBlack
+ShowLegend = 1
+Radian = 1
+Title = {this.ReportName}
+TitleFont = Kizo Light,30,clBlack
+
+[PointSeries1]
+FillColor = clRed
+LineColor = clRed
+Size = 0
+Style = 0
+LineSize = 2
+LineStyle = 0
+Interpolation = 2
+LabelPosition = 1
+PointCount = {points.Count() + 1}
+Points = {textPointsContent};
+LegendText = Probability Distribution Graph
+
+[Data]
+TextLabelCount = 0
+FuncCount = 0
+PointSeriesCount = 1
+ShadeCount = 0
+RelationCount = 0
+OleObjectCount = 0";
+
+                File.WriteAllText(this.ProbabilityDistributionGraphFilePath, content, System.Text.Encoding.UTF8);
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
         }
     }
 }
