@@ -21,12 +21,14 @@ namespace TXT_FrameTimeHandler.Commands
 
         public static double Round05(this double value)
         {
-            var temp = Math.Truncate(value);
+            var first2DecimalPlaces = (int)((decimal)value % 1 * 100);
 
-            if (temp > value)
-                return temp - 0.5;
+            if (first2DecimalPlaces < 25)
+                return value.Round();
+            else if (first2DecimalPlaces < 75)
+                return (long)value + 0.5;
             else
-                return temp + 0.5;
+                return value.Round();
         }
 
     }

@@ -34,15 +34,13 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                 while ((line = sr.ReadLine()) != null)
                 {
                     line = line.Split(',')
-                        [MsBetweenDisplayChangeActualColumnIndex];
+                        .ElementAt(MsBetweenDisplayChangeActualColumnIndex);
 
                     var currentItemFrameTime = Convert.ToDouble(line,
                         CultureInfo.InvariantCulture // because Russians and others have "12,34", but not "12.34" :)
                         ).Round2();
                     framesTimes.AddLast(currentItemFrameTime);
                 }
-
-
 
                 return new Maybe<FramesData>(
                     new FramesData(framesTimes)

@@ -324,16 +324,15 @@ namespace TXT_FrameTimeHandler.ViewModels
                 {
 
                     if (distrValues.ContainsKey(frameTime))
-                        distrValues[frameTime] += frameTime.Round05();
+                        distrValues[frameTime] += frameTime;
                     else
-                        distrValues.Add(frameTime, frameTime.Round05());
+                        distrValues.Add(frameTime, frameTime);
                 }
-                
 
-                var points =
-                    distrValues.OrderBy(item => item.Key)
-                        .Select(item => ((1000.0 / item.Key).Round(), item.Value))
-                        .ToArray();
+
+                IEnumerable<(double, double)> points =
+                    distrValues.OrderByDescending(item => item.Key)
+                        .Select(item => ((1000.0 / item.Key).Round2(), item.Value.Round2()));
 
                 var textPointsContent = string.Join(";",
                     points
