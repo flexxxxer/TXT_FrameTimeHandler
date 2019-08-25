@@ -10,7 +10,7 @@ namespace TXT_FrameTimeHandler.DataProcessing
     {
         private readonly T _value;
 
-        private Maybe() { }
+        private Maybe() => this.HasValue = false;
 
         public Maybe(T someValue)
         {
@@ -18,27 +18,15 @@ namespace TXT_FrameTimeHandler.DataProcessing
                 if (someValue == null)
                     throw new ArgumentException();
 
+            this.HasValue = true;
             this._value = someValue;
         }
 
-        public bool HasValue 
-            => typeof(T).IsClass ? this._value != null : true;
+        public bool HasValue { get; }
 
         public T Value
-        {
-            get
-            {
-                if (typeof(T).IsClass)
-                    if (this._value == null)
-                        throw new Exception();
+            => this.HasValue ? this._value : throw new InvalidOperationException();
 
-                return this._value;
-            }
-        }
-
-        public Maybe<U> Bind<U>(Func<T, Maybe<U>> func) 
-            => this._value != null ? func(this._value) : Maybe<U>.None;
-
-        public static Maybe<T> None { get; } = new Maybe<T>();
+        public static Maybe<T> None => new Maybe<T>();
     }
 }

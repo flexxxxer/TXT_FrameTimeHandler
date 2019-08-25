@@ -237,15 +237,21 @@ namespace TXT_FrameTimeHandler.ViewModels
                 else
                 {
                     FramesData data = result.Value;
-                    var content = "TXT FrameTimeHandler v0.5     Konushkov Pavel. YouTube Channel: Этот Компьютер" 
+
+                    var headerContent = "TXT FrameTimeHandler v0.5     Konushkov Pavel. YouTube Channel: Этот Компьютер" 
                     + Environment.NewLine 
                     + Environment.NewLine 
                     + "Frames\t\tTime test\t\tAVG_FPS\t\tLow 0.1% mFPS\t\tLow 1% mFPS\t\tLow 5% mFPS\t\tLow 50% mFPS\t\ttest name"
-                    + Environment.NewLine
-                    + $"{data.Count}\t\t{data.TimeTest.MyToString()}s\t\t\t{data.AvgFPS.MyToString()}\t\t{data.OneTenthPercentFPS.MyToString()}\t\t\t{data.OnePercentFps.MyToString()}\t\t\t{data.FivePercentFPS.MyToString()}\t\t\t{data.FiftyPercentFPS.MyToString()}\t\t\t{this.ReportName}"
                     + Environment.NewLine;
 
-                    File.WriteAllText($"{Directory.GetCurrentDirectory()}\\data.txt", content);
+                    var currentLogInfo = $"{data.Count}\t\t{data.TimeTest.MyToString()}s\t\t\t{data.AvgFPS.MyToString()}\t\t{data.OneTenthPercentFPS.MyToString()}\t\t\t{data.OnePercentFps.MyToString()}\t\t\t{data.FivePercentFPS.MyToString()}\t\t\t{data.FiftyPercentFPS.MyToString()}\t\t\t{this.ReportName}"
+                            + Environment.NewLine;
+
+                    if (File.Exists($"{Directory.GetCurrentDirectory()}\\data.txt"))
+                        File.AppendAllText($"{Directory.GetCurrentDirectory()}\\data.txt",
+                            currentLogInfo);
+                    else
+                        File.WriteAllText($"{Directory.GetCurrentDirectory()}\\data.txt", headerContent + currentLogInfo);
                 }
 
             }, (arg) => !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath)));
@@ -360,40 +366,7 @@ namespace TXT_FrameTimeHandler.ViewModels
                         .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
                     );
 
-                var content =
-                    $@";This file was created by Graph (http://www.padowan.dk)
-; Do not change this file from other programs.
-[Graph]
-Version = 4.4.2.543
-MinVersion = 2.5
-OS = Windows NT 6.2
-
-[Axes]
-xMin = -5
-xMax = 180
-xTickUnit = 5
-xGridUnit = 5
-xShowGrid = 1
-xLabel = mFPS
-yMin = -600
-yMax = 10000
-yTickUnit = 500
-yGridUnit = 3000
-yShowGrid = 1
-yAutoGrid = 0
-yLabel = Время
-yShowNumbers = 0
-AxesColor = clBlack
-GridColor = clSilver
-NumberFont = Kizo Light,20,clBlack
-LabelFont = Kizo Light,30,clBlack
-LegendFont = Kizo Light,20,clBlack
-ShowLegend = 1
-Radian = 1
-Title = {this.ReportName}
-TitleFont = Kizo Light,30,clBlack
-
-[PointSeries1]
+                Func<int, string> func = n => $@"[PointSeries{n}]
 FillColor = clRed
 LineColor = clRed
 Size = 0
@@ -404,17 +377,9 @@ Interpolation = 2
 LabelPosition = 1
 PointCount = {points.Count() + 1}
 Points = {textPointsContent};
-LegendText = Frame Timing Graph
+LegendText = {this.ReportName}";
+                GraphApi.WriteNewGraphToFile(this.FrameTimingGraphFilePath, func);
 
-[Data]
-TextLabelCount = 0
-FuncCount = 0
-PointSeriesCount = 1
-ShadeCount = 0
-RelationCount = 0
-OleObjectCount = 0";
-
-                File.WriteAllText(this.FrameTimingGraphFilePath, content, System.Text.Encoding.UTF8);
             }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.WriteProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
@@ -448,40 +413,7 @@ OleObjectCount = 0";
                         .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
                     );
 
-                var content =
-                    $@";This file was created by Graph (http://www.padowan.dk)
-; Do not change this file from other programs.
-[Graph]
-Version = 4.4.2.543
-MinVersion = 2.5
-OS = Windows NT 6.2
-
-[Axes]
-xMin = -5
-xMax = 180
-xTickUnit = 5
-xGridUnit = 5
-xShowGrid = 1
-xLabel = mFPS
-yMin = -600
-yMax = 10000
-yTickUnit = 500
-yGridUnit = 3000
-yShowGrid = 1
-yAutoGrid = 0
-yLabel = Время
-yShowNumbers = 0
-AxesColor = clBlack
-GridColor = clSilver
-NumberFont = Kizo Light,20,clBlack
-LabelFont = Kizo Light,30,clBlack
-LegendFont = Kizo Light,20,clBlack
-ShowLegend = 1
-Radian = 1
-Title = {this.ReportName}
-TitleFont = Kizo Light,30,clBlack
-
-[PointSeries1]
+                Func<int, string> func = n => $@"[PointSeries{n}]
 FillColor = clRed
 LineColor = clRed
 Size = 0
@@ -492,17 +424,9 @@ Interpolation = 2
 LabelPosition = 1
 PointCount = {points.Count() + 1}
 Points = {textPointsContent};
-LegendText = Probability Density Graph
+LegendText = {this.ReportName}";
+                GraphApi.WriteNewGraphToFile(this.ProbabilityDensityGraphFilePath, func);
 
-[Data]
-TextLabelCount = 0
-FuncCount = 0
-PointSeriesCount = 1
-ShadeCount = 0
-RelationCount = 0
-OleObjectCount = 0";
-
-                File.WriteAllText(this.ProbabilityDensityGraphFilePath, content, System.Text.Encoding.UTF8);
             }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
 
             this.WriteProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
@@ -527,40 +451,7 @@ OleObjectCount = 0";
                         .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
                     );
 
-                var content =
-                    $@";This file was created by Graph (http://www.padowan.dk)
-; Do not change this file from other programs.
-[Graph]
-Version = 4.4.2.543
-MinVersion = 2.5
-OS = Windows NT 6.2
-
-[Axes]
-xMin = -5
-xMax = 180
-xTickUnit = 5
-xGridUnit = 5
-xShowGrid = 1
-xLabel = mFPS
-yMin = -600
-yMax = 10000
-yTickUnit = 500
-yGridUnit = 3000
-yShowGrid = 1
-yAutoGrid = 0
-yLabel = Время
-yShowNumbers = 0
-AxesColor = clBlack
-GridColor = clSilver
-NumberFont = Kizo Light,20,clBlack
-LabelFont = Kizo Light,30,clBlack
-LegendFont = Kizo Light,20,clBlack
-ShowLegend = 1
-Radian = 1
-Title = {this.ReportName}
-TitleFont = Kizo Light,30,clBlack
-
-[PointSeries1]
+                Func<int, string> func = n => $@"[PointSeries{n}]
 FillColor = clRed
 LineColor = clRed
 Size = 0
@@ -571,17 +462,9 @@ Interpolation = 2
 LabelPosition = 1
 PointCount = {points.Count() + 1}
 Points = {textPointsContent};
-LegendText = Probability Distribution Graph
+LegendText = {this.ReportName}";
+                GraphApi.WriteNewGraphToFile(this.ProbabilityDistributionGraphFilePath, func);
 
-[Data]
-TextLabelCount = 0
-FuncCount = 0
-PointSeriesCount = 1
-ShadeCount = 0
-RelationCount = 0
-OleObjectCount = 0";
-
-                File.WriteAllText(this.ProbabilityDistributionGraphFilePath, content, System.Text.Encoding.UTF8);
             }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
         }
     }
