@@ -5,13 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:TXT_FrameTimeHandler.ViewModels"
         mc:Ignorable="d"
-        Title="TXT_FrameTimeHandler" Height="470" Width="800" MinHeight="470" MinWidth="800"
+        Title="TXT_FrameTimeHandler" Height="470" Width="1000" MinHeight="470" MinWidth="800"
         WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewmodels:StartViewModel/>
     </Window.DataContext>
-    
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+    </Window.Resources>
+
     <Grid Margin="30, 10, 30, 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -28,12 +32,48 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
-                <ColumnDefinition/>
+                <ColumnDefinition x:Name="TestNameColumn"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Название теста:" FontSize="20"/>
             <TextBox MinWidth="100" FontSize="20" Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" TextAlignment="Left" HorizontalAlignment="Left"/>
+
+            <Grid HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding Path=ResultFramesData.HasValue, Converter={StaticResource BoolToVisConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="105"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Low 0.1% fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OneTenthPercentFPS, TargetNullValue=false}"/>
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Low 1% fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OnePercentFps, TargetNullValue=false}"/>
+                </Grid>
+
+                <Grid Grid.Column="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="AVG fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.AvgFPS, TargetNullValue=false}"/>
+                </Grid>
+            </Grid>
         </Grid>
-        
+
         <!-- путь файла логов -->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -42,7 +82,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="Путь файла логов" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5"/>
-            
+
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
@@ -50,9 +90,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" FontSize="16" TextWrapping="NoWrap" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
-                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectLogFilePathCommand}"/>
-                <Button Grid.Column="2" Margin="5" Content="Открыть" Command="{Binding OpenLogFileCommand}"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="10" TextWrapping="WrapWithOverflow" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Content="Обзор" Command="{Binding SelectLogFilePathCommand}"/>
             </Grid>
         </Grid>
 
@@ -86,7 +125,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" FontSize="16" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectFrameTimingGraphFilePathCommand}"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteFrameTimingGraphCommand}"/>
             </Grid>
@@ -122,7 +161,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" FontSize="16" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDensityGraphFilePathCommand}"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDensityGraphCommand}"/>
             </Grid>
@@ -158,7 +197,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Height="30" FontSize="16" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
                 <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDistributionGraphFilePathCommand}"/>
                 <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDistributionGraphCommand}"/>
             </Grid>

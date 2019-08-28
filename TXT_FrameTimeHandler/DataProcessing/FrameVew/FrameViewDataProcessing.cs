@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
-using System.Linq;
+
 using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing.FrameVew

@@ -167,6 +167,8 @@ namespace TXT_FrameTimeHandler.ViewModels
 
                 this.LogFilePath = file;
 
+                this.OpenLogFileCommand.Execute(new object());
+
             }, (arg) => true);
 
             this.SelectFrameTimingGraphFilePathCommand = new ClassicCommand((arg) =>
@@ -396,22 +398,26 @@ LegendText = {this.ReportName}";
                     allFrameTimes.ElementAt(0).Round() == 0.0 ? 
                         allFrameTimes.Skip(1) : allFrameTimes)
                 {
-
                     if (distrValues.ContainsKey(frameTime))
                         distrValues[frameTime] += frameTime;
                     else
                         distrValues.Add(frameTime, frameTime);
                 }
 
-
                 IEnumerable<(double, double)> points =
                     distrValues.OrderByDescending(item => item.Key)
-                        .Select(item => ((1000.0 / item.Key).Round2(), item.Value.Round2()));
+                        .Select(item => (
+                            item.Key == 0.0 ? 0.0 : (1000.0 / item.Key).Round2(), item.Value.Round2()
+                            )
+                        );
+
+                (double, double) min = points.Min();
+
+                points = new[] { (Math.Truncate(min.Item1) - 1.0, 0.0) }.Concat(points);
 
                 var textPointsContent = string.Join(";",
-                    points
-                        .Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
-                    );
+                    points.Select(value => $"{value.Item1.MyToString()},{value.Item2.MyToString()}")
+                );
 
                 Func<int, string> func = n => $@"[PointSeries{n}]
 FillColor = clRed
@@ -435,12 +441,12 @@ LegendText = {this.ReportName}";
 
                 // данные графика плотности вероятности
                 var frames = new List<(double frameValue, double frameTime)>(data.FramesTimes.Count() - 1);
-                var sum_time = 0.0;
+                var sumTime = 0.0;
                 foreach (var frameTimeItem in data.FramesTimes.OrderByDescending(v => v))
                 {
-                    sum_time += frameTimeItem;
+                    sumTime += frameTimeItem;
                     var frameValue = 1000.0 / frameTimeItem;
-                    frames.Add((frameValue, sum_time / data.TimeTest / 10.0));
+                    frames.Add((frameValue, sumTime / data.TimeTest / 10.0));
                 }
 
                 IEnumerable<(double, double)> points =
