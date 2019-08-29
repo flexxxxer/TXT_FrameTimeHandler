@@ -25,7 +25,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                 sr = new StreamReader(bs);
 
                 var MsBetweenDisplayChangeActualColumnIndex = 
-                    sr.ReadLine()
+                    sr.ReadLine() // maybe null reference exception
                     .Split(',')
                     .ToList()
                     .FindIndex(column => column == "MsBetweenDisplayChangeActual");
@@ -47,26 +47,16 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                     new FramesData(framesTimes)
                     );
             }
-            catch (Exception)
-            {
-                if (fs != null)
-                    fs.Dispose();
-                if (bs != null)
-                    bs.Dispose();
-                if (sr != null)
-                    sr.Dispose();
-
-                return Maybe<FramesData>.None;
-            }
+            catch { /* ignore */ }
             finally
             {
-                if (fs != null)
-                    fs.Dispose();
-                if (bs != null)
-                    bs.Dispose();
-                if (sr != null)
-                    sr.Dispose();
+                fs?.Dispose();
+                bs?.Dispose();
+                sr?.Dispose();
             }
+
+            // if we catch exception while reading, return none
+            return Maybe<FramesData>.None;
         }
     }
 }

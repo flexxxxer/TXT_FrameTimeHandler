@@ -23,7 +23,7 @@ namespace TXT_FrameTimeHandler.Commands
         }
 
         public bool CanExecute(object parameter)
-            => this._canExecute is null ? true : this._canExecute.Invoke(parameter);
+            => this._canExecute is null || this._canExecute.Invoke(parameter);
 
         public void Execute(object parameter)
             => this._execute(parameter);

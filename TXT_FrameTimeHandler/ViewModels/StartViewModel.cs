@@ -256,7 +256,7 @@ namespace TXT_FrameTimeHandler.ViewModels
                         File.WriteAllText($"{Directory.GetCurrentDirectory()}\\data.txt", headerContent + currentLogInfo);
                 }
 
-            }, (arg) => !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.LogFilePath) ? false : File.Exists(this.LogFilePath)));
+            }, (arg) => !string.IsNullOrEmpty(this.ReportName) && !string.IsNullOrEmpty(this.LogFilePath) && File.Exists(this.LogFilePath));
 
             this.SaveAsTxtFrameTimingGraphCommand = new ClassicCommand((arg) =>
             {
@@ -382,7 +382,7 @@ Points = {textPointsContent};
 LegendText = {this.ReportName}";
                 GraphApi.WriteNewGraphToFile(this.FrameTimingGraphFilePath, func);
 
-            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.FrameTimingGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && !string.IsNullOrEmpty(this.FrameTimingGraphFilePath) && File.Exists(this.LogFilePath));
 
             this.WriteProbabilityDensityGraphCommand = new ClassicCommand((arg) =>
             {
@@ -433,7 +433,7 @@ Points = {textPointsContent};
 LegendText = {this.ReportName}";
                 GraphApi.WriteNewGraphToFile(this.ProbabilityDensityGraphFilePath, func);
 
-            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && !string.IsNullOrEmpty(this.ProbabilityDensityGraphFilePath) && File.Exists(this.LogFilePath));
 
             this.WriteProbabilityDistributionGraphCommand = new ClassicCommand((arg) =>
             {
@@ -471,7 +471,7 @@ Points = {textPointsContent};
 LegendText = {this.ReportName}";
                 GraphApi.WriteNewGraphToFile(this.ProbabilityDistributionGraphFilePath, func);
 
-            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && (string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) ? false : File.Exists(this.LogFilePath)));
+            }, (arg) => this.ResultFramesData.HasValue && !string.IsNullOrEmpty(this.ReportName) && !string.IsNullOrEmpty(this.ProbabilityDistributionGraphFilePath) && File.Exists(this.LogFilePath));
         }
     }
 }

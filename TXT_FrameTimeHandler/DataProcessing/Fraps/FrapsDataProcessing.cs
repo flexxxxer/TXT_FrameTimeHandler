@@ -13,7 +13,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
             var fs = default(FileStream);
             var bs = default(BufferedStream);
             var sr = default(StreamReader);
-
+            
             try
             {
                 var framesTimes = new LinkedList<double>();
@@ -22,7 +22,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                 bs = new BufferedStream(fs);
                 sr = new StreamReader(bs);
 
-                sr.ReadLine(); // read emmpty line
+                sr.ReadLine(); // read empty line
                 sr.ReadLine(); // read first item
 
                 var line = "";
@@ -47,31 +47,20 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                     lastItemFrameTime = currentItemFrameTime;
                 }
 
-
                 return new Maybe<FramesData>(
                     new FramesData(framesTimes)
                     );
             }
-            catch (Exception)
-            {
-                if (fs != null)
-                    fs.Dispose();
-                if (bs != null)
-                    bs.Dispose();
-                if (sr != null)
-                    sr.Dispose();
-
-                return Maybe<FramesData>.None;
-            }
+            catch { /* ignored */ }
             finally
             {
-                if (fs != null)
-                    fs.Dispose();
-                if (bs != null)
-                    bs.Dispose();
-                if (sr != null)
-                    sr.Dispose();
+                fs?.Dispose();
+                bs?.Dispose();
+                sr?.Dispose();
             }
+
+            // if we catch exception while reading, return none
+            return Maybe<FramesData>.None;
         }
     }
 }
