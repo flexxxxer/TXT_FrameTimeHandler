@@ -132,5 +132,11 @@
   <ItemGroup>
     <Resource Include="logo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MinimizeButton.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="CloseButton.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
