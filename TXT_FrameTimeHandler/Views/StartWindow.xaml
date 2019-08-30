@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:TXT_FrameTimeHandler.ViewModels"
         mc:Ignorable="d"
-        Title="TXT_FrameTimeHandler" Height="500" Width="1000" MinHeight="470" MinWidth="800"
-        WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None" ResizeMode="NoResize" MouseLeftButtonDown="MoveForm">
+        Title="TXT_FrameTimeHandler" Height="593" Width="1000" MinHeight="470" MinWidth="800"
+        WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None" ResizeMode="NoResize" MouseLeftButtonDown="MoveForm" Icon="/TXT_FrameTimeHandler;component/Resources/logo.ico">
 
     <Window.DataContext>
         <viewmodels:StartViewModel/>
@@ -16,17 +16,19 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Window.Resources>
 
-    <Grid Margin="10,40,2,0">
+    <Grid Margin="10,40,2,0" Height="553" VerticalAlignment="Top">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="62"/>
+            <RowDefinition/>
+            <RowDefinition Height="7"/>
+            <RowDefinition/>
+            <RowDefinition Height="11"/>
+            <RowDefinition/>
+            <RowDefinition Height="12"/>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="11"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -34,44 +36,8 @@
                 <ColumnDefinition Width="175"/>
                 <ColumnDefinition x:Name="TestNameColumn"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Название теста:" FontSize="22"/>
-            <TextBox MinWidth="100" FontSize="20" Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" TextAlignment="Left" HorizontalAlignment="Left" Width="800" VerticalAlignment="Center" Margin="0,2"/>
-
-            <Grid HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding Path=ResultFramesData.HasValue, Converter={StaticResource BoolToVisConverter}}" Height="0" Margin="0,15" Width="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="105"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Low 0.1% fps:" FontSize="16"/>
-                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OneTenthPercentFPS, TargetNullValue=false}"/>
-                </Grid>
-
-                <Grid Grid.Column="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Low 1% fps:" FontSize="16"/>
-                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OnePercentFps, TargetNullValue=false}"/>
-                </Grid>
-
-                <Grid Grid.Column="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="AVG fps:" FontSize="16"/>
-                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.AvgFPS, TargetNullValue=false}"/>
-                </Grid>
-            </Grid>
+            <TextBlock Text="Название теста:" FontSize="22" Margin="0,18,0,13"/>
+            <TextBox MinWidth="100" FontSize="20" Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" TextAlignment="Left" HorizontalAlignment="Left" Width="800" VerticalAlignment="Center" Margin="0,19,0,13" Height="30"/>
         </Grid>
 
         <!-- путь файла логов -->
@@ -112,8 +78,8 @@
 
                 <TextBlock Text="График времени кадров" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" FontWeight="Bold" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,6,28,6" TextDecorations="{x:Null}"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtFrameTimingGraphCommand}" FontSize="14" Height="31"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,7,30,6" TextDecorations="{x:Null}"/>
+                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtFrameTimingGraphCommand}" FontSize="14"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -148,8 +114,8 @@
 
                 <TextBlock Text="График плотности вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" FontWeight="Bold" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,7,28,5"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDensityGraphCommand}" FontSize="14" Height="31"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,8,29,5"/>
+                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDensityGraphCommand}" FontSize="14"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -184,8 +150,8 @@
 
                 <TextBlock Text="График распределения вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" FontWeight="Bold" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,6,28,6"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDistributionGraphCommand}" FontSize="14" Height="31"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" Margin="0,7,30,6"/>
+                <Button Grid.Column="2" Margin="5,0,0,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDistributionGraphCommand}" FontSize="14"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -202,17 +168,36 @@
                 <Button Grid.Column="2" Margin="5,0" Content="Записать" Command="{Binding WriteProbabilityDistributionGraphCommand}" FontSize="14"/>
             </Grid>
         </Grid>
-        <Button x:Name="CloseButton" Content="" Margin="953,-39,0,34" VerticalAlignment="Bottom" Height="35" BorderThickness="0" Click="Close" Width="35">
-            <Button.Background>
-                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/CloseButton.jpg"/>
-            </Button.Background>
-        </Button>
-        <Button x:Name="MinimizeButton" Content="" Margin="913,-39,40,0" VerticalAlignment="Top" Height="35" BorderThickness="0" Click="Minimize" Width="35">
-            <Button.Background>
-                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/MinimizeButton.jpg"/>
-            </Button.Background>
-        </Button>
-        <Label x:Name="TitleLabel" Content="TXT_FrameTimeHandler" Margin="0,-38,724,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold" Height="34" MouseLeftButtonDown="MoveForm"/>
 
+        <Button x:Name="CloseButton" Content="" Margin="954,-39,0,67" Click="Close" BorderThickness="0">
+            <Button.Background>
+                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/Resources/CloseButton.jpg"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="MinimizeButton" Content="" Margin="915,-39,39,67" BorderThickness="0" Click="Minimize" Foreground="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="0,0">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.986"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <Button.Background>
+                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/Resources/MinimizeButton.jpg"/>
+            </Button.Background>
+        </Button>
+        <Label x:Name="TitleLabel" Content="TXT_FrameTimeHandler" Margin="0,-39,724,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold" MouseLeftButtonDown="MoveForm" Height="37"/>
+        <Grid Grid.Row="8">
+            <Label Content="Low 0.1% fps:" HorizontalAlignment="Left" Margin="0,34,0,0" FontSize="22" Width="152" Height="36" VerticalAlignment="Top"/>
+            <Label Content="Low 1% fps:" HorizontalAlignment="Left" Margin="320,34,0,0" FontSize="22" Width="133" Height="36" VerticalAlignment="Top"/>
+            <Label Content="AVG fps:" HorizontalAlignment="Left" Margin="712,34,0,0" Grid.Row="8" FontSize="22" Width="95" Height="36" VerticalAlignment="Top"/>
+            <Label Content="Показатели FPS" HorizontalAlignment="Left" Grid.Row="8" FontSize="22" FontWeight="Bold" Width="192" Height="34" VerticalAlignment="Top"/>
+            <Grid Visibility="{Binding Path=ResultFramesData.HasValue, Converter={StaticResource BoolToVisConverter}}">
+                <Label Content="{Binding Path=ResultFramesData.Value.OneTenthPercentFPS, TargetNullValue=false}" HorizontalAlignment="Left" Margin="157,27,0,0" FontSize="36" FontWeight="Bold" Width="152" Height="49" VerticalAlignment="Top"/>
+                <Label Content="{Binding Path=ResultFramesData.Value.OnePercentFps, TargetNullValue=false}" HorizontalAlignment="Left" Margin="458,27,0,0" FontSize="36" FontWeight="Bold" Width="251" Height="49" VerticalAlignment="Top"/>
+                <Label Content="{Binding Path=ResultFramesData.Value.AvgFPS, TargetNullValue=false}" Margin="812,22,0,0" FontSize="36" FontWeight="Bold" Height="54" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

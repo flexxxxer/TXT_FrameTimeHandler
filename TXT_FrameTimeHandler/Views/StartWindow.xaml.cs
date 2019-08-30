@@ -26,5 +26,6 @@ namespace TXT_FrameTimeHandler
             catch { }
 
         }
+
     }
 }
