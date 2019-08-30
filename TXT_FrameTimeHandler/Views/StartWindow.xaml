@@ -13,6 +13,24 @@
     </Window.DataContext>
 
     <Window.Resources>
+        <Style x:Key="ControlButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Window.Resources>
 
@@ -169,12 +187,12 @@
             </Grid>
         </Grid>
 
-        <Button x:Name="CloseButton" Content="" Margin="954,-39,0,67" Click="Close" BorderThickness="0">
+        <Button x:Name="CloseButton" Content="" Margin="954,-39,0,67" Click="Close" BorderThickness="0" Style="{StaticResource ControlButton}">
             <Button.Background>
                 <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/Resources/CloseButton.jpg"/>
             </Button.Background>
         </Button>
-        <Button x:Name="MinimizeButton" Content="" Margin="915,-39,39,67" BorderThickness="0" Click="Minimize" Foreground="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="0,0">
+        <Button x:Name="MinimizeButton" Content="" Margin="915,-39,39,67" BorderThickness="0" Click="Minimize" Foreground="{x:Null}" BorderBrush="{x:Null}" RenderTransformOrigin="0,0" Style="{StaticResource ControlButton}">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

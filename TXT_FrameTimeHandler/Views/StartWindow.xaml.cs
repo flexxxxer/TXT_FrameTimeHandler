@@ -13,7 +13,6 @@ namespace TXT_FrameTimeHandler
             this.InitializeComponent();
         }
 
-        private void Close(object sender, RoutedEventArgs e) => this.Close();
 
         private void Minimize(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
 
@@ -26,6 +25,8 @@ namespace TXT_FrameTimeHandler
             catch { }
 
         }
+
+        private void Close(object sender, RoutedEventArgs e) => this.Close();
 
     }
 }
