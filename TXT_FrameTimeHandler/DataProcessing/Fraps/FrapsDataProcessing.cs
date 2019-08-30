@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Globalization;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing.Fraps
@@ -13,7 +13,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
             var fs = default(FileStream);
             var bs = default(BufferedStream);
             var sr = default(StreamReader);
-            
+
             try
             {
                 var framesTimes = new LinkedList<double>();
@@ -40,10 +40,10 @@ namespace TXT_FrameTimeHandler.DataProcessing.Fraps
                         .Join("", line.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
                     #endregion
 
-                    var currentItemFrameTime = Convert.ToDouble(line, 
+                    var currentItemFrameTime = Convert.ToDouble(line,
                         CultureInfo.InvariantCulture // because Russians and others have "12,34", but not "12.34" :)
                         );
-                    framesTimes.AddLast( (currentItemFrameTime - lastItemFrameTime).Round2());
+                    framesTimes.AddLast((currentItemFrameTime - lastItemFrameTime).Round2());
                     lastItemFrameTime = currentItemFrameTime;
                 }
 

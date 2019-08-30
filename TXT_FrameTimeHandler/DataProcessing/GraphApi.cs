@@ -52,11 +52,11 @@ TitleFont = Kizo Light,30,clBlack";
                 sr = new StreamReader(bs);
                 var line = string.Empty;
 
-                while((line = sr.ReadLine()) != null)
+                while ((line = sr.ReadLine()) != null)
                 {
                     if (line.Contains("PointSeriesCount"))
                         return new Maybe<int>(int.Parse(
-                            line.Split('=') [1].Replace(" ", string.Empty)
+                            line.Split('=')[1].Replace(" ", string.Empty)
                             )
                         );
                 }
@@ -97,7 +97,7 @@ OleObjectCount = 0";
         {
             Maybe<int> psCount = GraphApi.GetPointSeriesCount(path);
 
-            if(psCount.HasValue == false)
+            if (psCount.HasValue == false)
             {
                 var content = GraphApi.CreateDefaultHeader() + Environment.NewLine + Environment.NewLine +
                     createGraphWithNumberFunc(1) + Environment.NewLine + Environment.NewLine +

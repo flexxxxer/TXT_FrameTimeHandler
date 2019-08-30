@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Globalization;
-using System.ComponentModel;
-using System.Collections.Generic;
-
-using Microsoft.Win32;
-
 using TXT_FrameTimeHandler.Commands;
 using TXT_FrameTimeHandler.DataProcessing;
 using TXT_FrameTimeHandler.DataProcessing.FrameVew;
@@ -240,9 +238,9 @@ namespace TXT_FrameTimeHandler.ViewModels
                 {
                     FramesData data = result.Value;
 
-                    var headerContent = "TXT FrameTimeHandler v0.5     Konushkov Pavel. YouTube Channel: Этот Компьютер" 
-                    + Environment.NewLine 
-                    + Environment.NewLine 
+                    var headerContent = "TXT FrameTimeHandler v0.5     Konushkov Pavel. YouTube Channel: Этот Компьютер"
+                    + Environment.NewLine
+                    + Environment.NewLine
                     + "Frames\t\tTime test\t\tAVG_FPS\t\tLow 0.1% mFPS\t\tLow 1% mFPS\t\tLow 5% mFPS\t\tLow 50% mFPS\t\ttest name"
                     + Environment.NewLine;
 
@@ -268,12 +266,12 @@ namespace TXT_FrameTimeHandler.ViewModels
                 foreach (var frameTimeItem in data.FramesTimes.Skip(1))
                 {
                     frameNumber += frameTimeItem;
-                    frames.Add( (frameNumber, frameTimeItem) );
+                    frames.Add((frameNumber, frameTimeItem));
                 }
 
                 var content = string.Join(Environment.NewLine,
-                    frames.Select(frame => 
-                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}", 
+                    frames.Select(frame =>
+                        string.Format(CultureInfo.InvariantCulture, "{0}, \t{1}",
                             frame.frameNumber.Round2(), frame.frameTime.Round2())
                         )
                     );
@@ -394,8 +392,8 @@ LegendText = {this.ReportName}";
                     .Select(value => value.Round05());
 
 
-                foreach (var frameTime in 
-                    allFrameTimes.ElementAt(0).Round() == 0.0 ? 
+                foreach (var frameTime in
+                    allFrameTimes.ElementAt(0).Round() == 0.0 ?
                         allFrameTimes.Skip(1) : allFrameTimes)
                 {
                     if (distrValues.ContainsKey(frameTime))

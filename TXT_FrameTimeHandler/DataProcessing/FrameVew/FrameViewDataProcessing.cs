@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Globalization;
-using System.Collections.Generic;
-
 using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
@@ -24,7 +23,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                 bs = new BufferedStream(fs);
                 sr = new StreamReader(bs);
 
-                var MsBetweenDisplayChangeActualColumnIndex = 
+                var MsBetweenDisplayChangeActualColumnIndex =
                     sr.ReadLine() // maybe null reference exception
                     .Split(',')
                     .ToList()

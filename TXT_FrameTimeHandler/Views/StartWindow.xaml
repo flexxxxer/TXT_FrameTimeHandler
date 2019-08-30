@@ -212,7 +212,7 @@
                 <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/MinimizeButton.jpg"/>
             </Button.Background>
         </Button>
-        <Label x:Name="TitleLabel" Content="TXT_FrameTimeHandler" Margin="0,-38,726,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold" Height="34" MouseLeftButtonDown="MoveForm"/>
+        <Label x:Name="TitleLabel" Content="TXT_FrameTimeHandler" Margin="0,-38,724,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold" Height="34" MouseLeftButtonDown="MoveForm"/>
 
     </Grid>
 </Window>

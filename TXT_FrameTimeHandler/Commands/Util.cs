@@ -5,7 +5,7 @@ namespace TXT_FrameTimeHandler.Commands
 {
     public static class Util
     {
-        public static double Round(this double value, int decimals = 0) 
+        public static double Round(this double value, int decimals = 0)
             => Math.Round(value, decimals);
 
         public static double Round2(this double value)

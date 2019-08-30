@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
+using System.Linq;
 using TXT_FrameTimeHandler.Commands;
 
 namespace TXT_FrameTimeHandler.DataProcessing
@@ -33,7 +32,7 @@ namespace TXT_FrameTimeHandler.DataProcessing
             #region calc 0.1, 1, 5, 50% and avg fps
 
             testTime = framesTimes.Sum();
-            
+
             var oneTenthPercentTime = testTime / 1000.0; // 0.1%
             var onePercentTime = testTime / 100.0; // 1%
             var fivePercentTime = testTime / 20.0; // 5%
