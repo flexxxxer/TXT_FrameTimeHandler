@@ -20,9 +20,19 @@ namespace TXT_FrameTimeHandler
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow() => this.InitializeComponent();
+
+        private void Close(object sender, RoutedEventArgs e) => Close();
+
+        private void Minimize(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
+        private void MoveForm(object sender, MouseButtonEventArgs e)
         {
-            this.InitializeComponent();
+            try
+            {
+                DragMove();
+            }
+            catch { }
         }
     }
 }
