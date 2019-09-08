@@ -5,70 +5,83 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:TXT_FrameTimeHandler.ViewModels"
         mc:Ignorable="d"
-        Title="TXT_FrameTimeHandler" Height="565" Width="1000" MinHeight="470" MinWidth="800"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Icon="/TXT_FrameTimeHandler;component/Resources/logo.ico" Topmost="True" MouseLeftButtonDown="MoveForm">
+        Title="TXT_FrameTimeHandler" Height="470" Width="1000" MinHeight="470" MinWidth="800"
+        WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewmodels:StartViewModel/>
     </Window.DataContext>
 
     <Window.Resources>
-        <Style x:Key="ControlButton" TargetType="Button">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.8" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Window.Resources>
 
-    <Grid Margin="10,43,2,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="925*"/>
-            <ColumnDefinition Width="63*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Margin="30, 10, 30, 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="13*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="18*"/>
+            <RowDefinition Height="1.2*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="18*"/>
+            <RowDefinition Height="1.2*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="18*"/>
-            <RowDefinition Height="90"/>
-            <RowDefinition Height="7"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition x:Name="TestNameColumn"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Название теста:" FontSize="20"/>
-            <TextBox MinWidth="100" FontSize="20" Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" TextAlignment="Left" HorizontalAlignment="Left" Width="832"/>
+            <TextBox MinWidth="100" FontSize="20" Text="{Binding ReportName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1" TextAlignment="Left" HorizontalAlignment="Left"/>
+
+            <Grid HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding Path=ResultFramesData.HasValue, Converter={StaticResource BoolToVisConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="105"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Low 0.1% fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OneTenthPercentFPS, TargetNullValue=false}"/>
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Low 1% fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.OnePercentFps, TargetNullValue=false}"/>
+                </Grid>
+
+                <Grid Grid.Column="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="AVG fps:" FontSize="16"/>
+                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding Path=ResultFramesData.Value.AvgFPS, TargetNullValue=false}"/>
+                </Grid>
+            </Grid>
         </Grid>
 
         <!-- путь файла логов -->
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Путь файла логов" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" FontWeight="Bold"/>
+            <TextBlock Text="Путь файла логов" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5"/>
 
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -77,13 +90,13 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox IsReadOnly="True" FontSize="18" TextWrapping="WrapWithOverflow" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" Height="33"/>
-                <Button Grid.Column="1" Grid.ColumnSpan="2" Margin="5,0" Content="Обзор" Command="{Binding SelectLogFilePathCommand}" FontSize="14"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="10" TextWrapping="WrapWithOverflow" Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Content="Обзор" Command="{Binding SelectLogFilePathCommand}"/>
             </Grid>
         </Grid>
 
         <!-- график времени кадров -->
-        <Grid Grid.Row="3" Grid.ColumnSpan="2">
+        <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
@@ -97,10 +110,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="График времени кадров" FontSize="22" VerticalAlignment="Center" FontWeight="Bold" Height="35" HorizontalAlignment="Center" Width="593" />
+                <TextBlock Text="График времени кадров" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16" Margin="0,7,48,8"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtFrameTimingGraphCommand}" FontSize="14"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtFrameTimingGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -112,14 +125,14 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox IsReadOnly="True" FontSize="18" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" Height="35"/>
-                <Button Grid.Column="1" Margin="5,0" Content="Обзор" Command="{Binding SelectFrameTimingGraphFilePathCommand}" FontSize="14"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Записать" Command="{Binding WriteFrameTimingGraphCommand}" FontSize="14"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding FrameTimingGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectFrameTimingGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteFrameTimingGraphCommand}"/>
             </Grid>
         </Grid>
 
         <!-- график плотности вероятности -->
-        <Grid Grid.Row="5" Grid.ColumnSpan="2">
+        <Grid Grid.Row="5">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
@@ -133,10 +146,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="График плотности вероятности" FontSize="22" VerticalAlignment="Bottom" FontWeight="Bold" Height="35" />
+                <TextBlock Text="График плотности вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16" Margin="0,7,48,8"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDensityGraphCommand}" FontSize="14"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtProbabilityDensityGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -148,14 +161,14 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox IsReadOnly="True" FontSize="18" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" Height="35"/>
-                <Button Grid.Column="1" Margin="5,0" Content="Обзор" Command="{Binding SelectProbabilityDensityGraphFilePathCommand}" FontSize="14"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Записать" Command="{Binding WriteProbabilityDensityGraphCommand}" FontSize="14"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding ProbabilityDensityGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDensityGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDensityGraphCommand}"/>
             </Grid>
         </Grid>
 
         <!-- график распределения вероятности -->
-        <Grid Grid.Row="7" Grid.ColumnSpan="2">
+        <Grid Grid.Row="7">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="20"/>
@@ -169,10 +182,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="График распределения вероятности" FontSize="22" VerticalAlignment="Bottom" FontWeight="Bold" Height="35" />
+                <TextBlock Text="График распределения вероятности" FontSize="22" VerticalAlignment="Bottom" Margin="0, 0, 0, 5" />
 
-                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16" Margin="0,7,48,8"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Сохранить" Command="{Binding SaveAsTxtProbabilityDistributionGraphCommand}" FontSize="14"/>
+                <TextBlock Grid.Column="1" Text="Сохранить как TXT:" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16"/>
+                <Button Grid.Column="2" Margin="5" Content="СОХРАНИТЬ" Command="{Binding SaveAsTxtProbabilityDistributionGraphCommand}"/>
             </Grid>
 
             <TextBlock Text="Записать в существующий файл графиков:" FontSize="15" Grid.Row="1"/>
@@ -184,29 +197,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox IsReadOnly="True" FontSize="18" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" Height="35"/>
-                <Button Grid.Column="1" Margin="5,0" Content="Обзор" Command="{Binding SelectProbabilityDistributionGraphFilePathCommand}" FontSize="14"/>
-                <Button Grid.Column="2" Margin="5,0" Content="Записать" Command="{Binding WriteProbabilityDistributionGraphCommand}" FontSize="14"/>
+                <TextBox IsReadOnly="True" Height="30" FontSize="16" Text="{Binding ProbabilityDistributionGraphFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextAlignment="Center"/>
+                <Button Grid.Column="1" Margin="5" Content="Обзор" Command="{Binding SelectProbabilityDistributionGraphFilePathCommand}"/>
+                <Button Grid.Column="2" Margin="5" Content="Записать" Command="{Binding WriteProbabilityDistributionGraphCommand}"/>
             </Grid>
         </Grid>
-        <Button x:Name="CloseButton" Content="" HorizontalAlignment="Left" Margin="33,-40,0,0" VerticalAlignment="Top" Width="30" Height="30" BorderThickness="0" Click="Close" Grid.Column="1" Style="{StaticResource ControlButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/Resources/CloseButton.jpg"/>
-            </Button.Background>
-        </Button>
-        <Button x:Name="MinimizeButton" Content="" HorizontalAlignment="Left" Margin="923,-40,0,0" VerticalAlignment="Top" Width="30" Height="30" BorderThickness="0" Click="Minimize" Grid.ColumnSpan="2" Style="{StaticResource ControlButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="/TXT_FrameTimeHandler;component/Resources/MinimizeButton.jpg"/>
-            </Button.Background>
-        </Button>
-        <Label x:Name="TitleLabel" Content="TXT_FrameTimeHandler" HorizontalAlignment="Left" Margin="0,-40,0,0" VerticalAlignment="Top" Height="35" Width="265" FontSize="22" FontWeight="Bold"/>
-        <Label Content="Показатели FPS" HorizontalAlignment="Left" Grid.Row="8" Width="194" FontSize="22" FontWeight="Bold" Margin="0,0,0,56"/>
-        <Label Content="Low 0.1% fps:" HorizontalAlignment="Left" Margin="0,40,0,0" Grid.Row="8" VerticalAlignment="Top" FontSize="18" Height="35" Width="128" FontStyle="Italic"/>
-        <Label Content="Low 1% fps:" HorizontalAlignment="Left" Margin="360,40,0,0" Grid.Row="8" VerticalAlignment="Top" FontSize="18" Height="32" Width="114" FontStyle="Italic"/>
-        <Label Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="193,45,-166,0" Grid.Row="8" VerticalAlignment="Top" Height="23" Width="36"/>
-        <Label Content="AVG fps:" HorizontalAlignment="Left" Margin="718,40,0,0" Grid.Row="8" VerticalAlignment="Top" FontSize="18" FontStyle="Italic"/>
-        <Label x:Name="AVGLabel" Content="{Binding Path=ResultFramesData.Value.AvgFPS, TargetNullValue=false}"  HorizontalAlignment="Left" Margin="797,34,0,15" Grid.Row="8" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="176" FontSize="22" FontWeight="Bold" FontStyle="Italic" Height="41"/>
-        <Label x:Name="OneLabel" Content="{Binding Path=ResultFramesData.Value.OnePercentFps, TargetNullValue=false}"  HorizontalAlignment="Left" Margin="474,34,0,15" Grid.Row="8" VerticalAlignment="Center" Width="239" FontSize="22" FontWeight="Bold" FontStyle="Italic" Height="41"/>
-        <Label x:Name="ZeroOneLabel" Content="{Binding Path=ResultFramesData.Value.OneTenthPercentFPS, TargetNullValue=false}" HorizontalAlignment="Left" Margin="128,34,0,10" Grid.Row="8" VerticalAlignment="Center" Width="217" FontSize="22" FontWeight="Bold" FontStyle="Italic" Height="46"/>
+
     </Grid>
 </Window>
