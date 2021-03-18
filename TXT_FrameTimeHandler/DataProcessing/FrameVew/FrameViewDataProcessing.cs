@@ -28,7 +28,7 @@ namespace TXT_FrameTimeHandler.DataProcessing.FrameVew
                     sr.ReadLine() // maybe null reference exception
                     .Split(',')
                     .ToList()
-                    .FindIndex(column => column == "MsBetweenDisplayChangeActual");
+                    .FindIndex(column => column == "MsBetweenDisplayChangeActual" || column == "MsBetweenDisplayChange");
 
                 var line = "";
 
